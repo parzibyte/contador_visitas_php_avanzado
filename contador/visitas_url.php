@@ -27,7 +27,12 @@ También tengo canal de YouTube: https://www.youtube.com/channel/UCroP4BTWjfM0Ck
 ------------------------------------------------------------------------------------------------
 */ ?><?php include_once "encabezado.php"; ?>
 <?php
+if (!isset($_GET["url"])) {
+    exit("No hay URL");
+}
+$url = urldecode($_GET["url"]);
 include_once "funciones.php";
+
 $hoy = fechaHoy();
 list($inicio, $fin) = fechaInicioYFinDeMes();
 if (isset($_GET["inicio"])) {
@@ -36,28 +41,29 @@ if (isset($_GET["inicio"])) {
 if (isset($_GET["fin"])) {
     $fin = $_GET["fin"];
 }
-if (isset($_GET["hoy"])) {
-    $hoy = $_GET["hoy"];
-}
+$visitasYVisitantes = obtenerConteoVisitasYVisitantesDePaginaEnRango($inicio, $fin, $url);
 $visitasYVisitantes = obtenerConteoVisitasYVisitantesEnRango($hoy, $hoy);
-$paginas = obtenerPaginasVisitadasEnFecha($hoy);
-$visitantes = obtenerVisitantesEnRango($inicio, $fin);
-$visitas = obtenerVisitasEnRango($inicio, $fin);
+$visitantes = obtenerVisitantesDePaginaEnRango($inicio, $fin, $url);
+$visitas = obtenerVisitasDePaginaEnRango($inicio, $fin, $url);
 ?>
 <section class="section">
     <div class="columns">
-
         <div class="column">
+
             <div class="card">
                 <header class="card-header">
                     <p class="card-header-title">
-                        Estadísticas entre <?php echo $inicio ?> y <?php echo $fin ?>
+                        Estadísticas para <?php echo $url ?> entre <?php echo $inicio ?> y <?php echo $fin ?>
                     </p>
                 </header>
                 <div class="card-content">
                     <div class="content">
-                        <form action="dashboard.php">
-                            <input type="hidden" name="hoy" value="<?php echo $hoy ?>">
+                        <a class="button is-info mb-2" href="dashboard.php">
+                            <i class="fa fa-arrow-left"></i>
+                            &nbsp;
+                            Volver</a>
+                        <form action="visitas_url.php">
+                            <input type="hidden" value="<?php echo $url ?>" name="url">
                             <div class="field is-grouped">
                                 <p class="control is-expanded">
                                     <label>Desde: </label>
@@ -70,80 +76,11 @@ $visitas = obtenerVisitasEnRango($inicio, $fin);
                                 <p class="control">
                                     <!--La etiqueta es invisible a propósito para que tome el espacio y alinee el botón-->
                                     <label style="color: white;">ª</label>
-                                    <input type="submit" value="OK" class="button is-success input">
+                                    <input type="submit" value="Filtrar" class="button is-success input">
                                 </p>
                             </div>
                         </form>
                         <canvas id="grafica"></canvas>
-                    </div>
-                </div>
-                <footer class="card-footer">
-                    <small class="mx-2 my-2">By parzibyte</small>
-                </footer>
-            </div>
-        </div>
-        <div class="column is-one-third ">
-            <div class="card">
-                <header class="card-header">
-                    <p class="card-header-title">
-                        Estadísticas de <?php echo $hoy ?>
-                    </p>
-                </header>
-                <div class="card-content">
-                    <div class="content">
-                        <form action="dashboard.php" class="mb-2">
-                            <input type="hidden" name="inicio" value="<?php echo $inicio ?>">
-                            <input type="hidden" name="fin" value="<?php echo $fin ?>">
-                            <div class="field is-grouped">
-                                <p class="control is-expanded">
-                                    <label>Fecha: </label>
-                                    <input class="input" type="date" name="hoy" value="<?php echo $hoy ?>">
-                                </p>
-                                <p class="control">
-                                    <!--La etiqueta es invisible a propósito para que tome el espacio y alinee el botón-->
-                                    <label style="color: white;">ª</label>
-                                    <input type="submit" value="OK" class="button is-success input">
-                                </p>
-                            </div>
-                        </form>
-                        <div class="field is-grouped is-grouped-multiline">
-                            <div class="control">
-                                <div class="tags has-addons">
-                                    <span class="tag is-success is-large">Visitas</span>
-                                    <span class="tag is-info is-large"><?php echo $visitasYVisitantes->visitas ?></span>
-                                </div>
-                            </div>
-                            <div class="control">
-                                <div class="tags has-addons">
-                                    <span class="tag is-warning is-large">Visitantes</span>
-                                    <span class="tag is-info is-large"><?php echo $visitasYVisitantes->visitantes ?></span>
-                                </div>
-                            </div>
-                        </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Página</th>
-                                    <th>Visitas</th>
-                                    <th>Visitantes</th>
-                                    <th>Estadísticas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($paginas as $pagina) { ?>
-                                    <tr>
-                                        <td><a target="_blank" href="<?php echo $pagina->url ?>"><?php echo $pagina->pagina ?></a></td>
-                                        <td><?php echo $pagina->conteo_visitas ?></td>
-                                        <td><?php echo $pagina->conteo_visitantes ?></td>
-                                        <td>
-                                            <a class="button is-info" href="visitas_url.php?url=<?php echo urlencode($pagina->url) ?>">
-                                                <i class="fa fa-chart-area"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
                 <footer class="card-footer">

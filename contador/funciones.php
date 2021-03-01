@@ -48,7 +48,42 @@ function obtenerPaginasVisitadasEnFecha($fecha)
     return $sentencia->fetchAll();
 }
 
+function obtenerConteoVisitasYVisitantesDePaginaEnRango($fechaInicio, $fechaFin, $url)
+{
+    return (object)[
+        "visitantes" => obtenerConteoVisitantesDePaginaEnRango($fechaInicio, $fechaFin, $url),
+        "visitas" => obtenerConteoVisitasDePaginaEnRango($fechaInicio, $fechaFin, $url),
+    ];
+}
+function obtenerConteoVisitantesDePaginaEnRango($fechaInicio, $fechaFin, $url)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("SELECT COUNT(DISTINCT ip) AS conteo FROM visitas WHERE fecha >= ? AND fecha <= ? AND url = ?");
+    $sentencia->execute([$fechaInicio, $fechaFin, $url]);
+    return $sentencia->fetchObject()->conteo;
+}
 
+function obtenerConteoVisitasDePaginaEnRango($fechaInicio, $fechaFin, $url)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("SELECT COUNT(*) AS conteo FROM visitas WHERE fecha >= ? AND fecha <= ? AND url = ?");
+    $sentencia->execute([$fechaInicio, $fechaFin, $url]);
+    return $sentencia->fetchObject()->conteo;
+}
+function obtenerVisitantesDePaginaEnRango($fechaInicio, $fechaFin, $url)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("SELECT fecha, COUNT(DISTINCT ip) AS conteo FROM visitas WHERE fecha >= ? AND fecha <= ? AND url = ? GROUP BY fecha");
+    $sentencia->execute([$fechaInicio, $fechaFin, $url]);
+    return $sentencia->fetchAll();
+}
+function obtenerVisitasDePaginaEnRango($fechaInicio, $fechaFin, $url)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("SELECT fecha, COUNT(*) AS conteo FROM visitas WHERE fecha >= ? AND fecha <= ? AND url = ? GROUP BY fecha");
+    $sentencia->execute([$fechaInicio, $fechaFin, $url]);
+    return $sentencia->fetchAll();
+}
 
 function obtenerConteoVisitasYVisitantesEnRango($fechaInicio, $fechaFin)
 {

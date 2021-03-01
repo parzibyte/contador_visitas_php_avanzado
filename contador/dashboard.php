@@ -49,8 +49,6 @@
     <?php
     include_once "funciones.php";
     $hoy = fechaHoy();
-    $visitasYVisitantes = obtenerConteoVisitasYVisitantesDeHoy();
-    $paginas = obtenerPaginasVisitadasEnFecha($hoy);
     list($inicio, $fin) = fechaInicioYFinDeMes();
     if (isset($_GET["inicio"])) {
         $inicio = $_GET["inicio"];
@@ -58,6 +56,11 @@
     if (isset($_GET["fin"])) {
         $fin = $_GET["fin"];
     }
+    if (isset($_GET["hoy"])) {
+        $hoy = $_GET["hoy"];
+    }
+    $visitasYVisitantes = obtenerConteoVisitasYVisitantesEnRango($hoy, $hoy);
+    $paginas = obtenerPaginasVisitadasEnFecha($hoy);
     $visitantes = obtenerVisitantesEnRango($inicio, $fin);
     $visitas = obtenerVisitasEnRango($inicio, $fin);
     ?>
@@ -74,6 +77,7 @@
                     <div class="card-content">
                         <div class="content">
                             <form action="dashboard.php">
+                                <input type="hidden" name="hoy" value="<?php echo $hoy ?>">
                                 <div class="field is-grouped">
                                     <p class="control is-expanded">
                                         <label>Desde: </label>
@@ -102,12 +106,26 @@
                 <div class="card">
                     <header class="card-header">
                         <p class="card-header-title">
-                            Estadísticas de hoy (<?php echo $hoy ?>)
+                            Estadísticas de <?php echo $hoy ?>
                         </p>
-
                     </header>
                     <div class="card-content">
                         <div class="content">
+                            <form action="dashboard.php" class="mb-2">
+                                <input type="hidden" name="inicio" value="<?php echo $inicio ?>">
+                                <input type="hidden" name="fin" value="<?php echo $fin ?>">
+                                <div class="field is-grouped">
+                                    <p class="control is-expanded">
+                                        <label>Fecha: </label>
+                                        <input class="input" type="date" name="hoy" value="<?php echo $hoy ?>">
+                                    </p>
+                                    <p class="control">
+                                        <!--La etiqueta es invisible a propósito para que tome el espacio y alinee el botón-->
+                                        <label style="color: white;">ª</label>
+                                        <input type="submit" value="OK" class="button is-success input">
+                                    </p>
+                                </div>
+                            </form>
                             <div class="field is-grouped is-grouped-multiline">
                                 <div class="control">
                                     <div class="tags has-addons">

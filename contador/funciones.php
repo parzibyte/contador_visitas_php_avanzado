@@ -20,11 +20,7 @@ function obtenerPaginasVisitadasEnFecha($fecha)
     return $sentencia->fetchAll();
 }
 
-function obtenerConteoVisitasYVisitantesDeHoy()
-{
-    $hoy = fechaHoy();
-    return obtenerConteoVisitasYVisitantesEnRango($hoy, $hoy);
-}
+
 
 function obtenerConteoVisitasYVisitantesEnRango($fechaInicio, $fechaFin)
 {

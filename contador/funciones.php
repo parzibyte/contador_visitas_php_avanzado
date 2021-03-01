@@ -39,9 +39,16 @@ function fechaHoy()
 {
     return date("Y-m-d");
 }
+/*
+Nota: está limitado a solo traer los 10 primeros registros, ordenados por las veces que se visitaron
+*/
 function obtenerPaginasVisitadasEnFecha($fecha)
 {
-    $consulta = "SELECT COUNT(*) AS conteo_visitas, count(distinct ip) as conteo_visitantes, url, pagina from visitas where fecha = ? group by url, pagina;";
+    $consulta = "SELECT COUNT(*) AS conteo_visitas, count(distinct ip) as conteo_visitantes, url, pagina
+    from visitas where fecha = ?
+    group by url, pagina
+    ORDER BY conteo_visitas DESC
+    LIMIT 10;";
     $bd = obtenerConexion();
     $sentencia = $bd->prepare($consulta);
     $sentencia->execute([$fecha]);

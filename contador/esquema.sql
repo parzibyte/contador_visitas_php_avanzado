@@ -4,3 +4,5 @@ CREATE TABLE IF NOT EXISTS visitas(
     pagina VARCHAR(255) NOT NULL,
     url VARCHAR(255) NOT NULL
 );
+
+ALTER TABLE visitas ADD INDEX indice_fecha (fecha);

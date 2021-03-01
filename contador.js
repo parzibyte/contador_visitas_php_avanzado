@@ -1,4 +1,11 @@
 (() => {
+    /*
+    Script que cuenta la visita y la envía al servidor con PHP
+    Solo tienes que incluir este script o código en todas las páginas en donde quieras registrar las visitas
+    y los visitantes
+
+    https://parzibyte.me/blog
+    */
     document.addEventListener("DOMContentLoaded", async () => {
         try {
             // Preferiblemente debería ser la URL absoluta

@@ -1,5 +1,12 @@
 <?php
 
+function fechaInicioYFinDeMes()
+{
+
+    $inicio = date("Y-m-01");
+    $fin = date("Y-m-t");
+    return [$inicio, $fin];
+}
 function fechaHoy()
 {
     return date("Y-m-d");

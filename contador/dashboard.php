@@ -25,7 +25,8 @@ Si el código es útil para ti, puedes agradecerme siguiéndome: https://parziby
 Y compartiendo mi blog con tus amigos
 También tengo canal de YouTube: https://www.youtube.com/channel/UCroP4BTWjfM0CkGB6AFUoBg?sub_confirmation=1
 ------------------------------------------------------------------------------------------------
-*/ ?><?php include_once "encabezado.php"; ?>
+*/ ?>
+<?php include_once "encabezado.php"; ?>
 <?php
 include_once "funciones.php";
 $hoy = fechaHoy();

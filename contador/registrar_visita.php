@@ -32,5 +32,5 @@ if (!$payload) {
     exit("");
 }
 include_once "funciones.php";
-$ok = registrarVisita($payload->pagina,$payload->url);
+$ok = registrarVisita($payload->pagina, $payload->url);
 echo json_encode($ok);
